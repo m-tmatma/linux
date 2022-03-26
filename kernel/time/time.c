@@ -171,6 +171,7 @@ int do_sys_settimeofday64(const struct timespec64 *tv, const struct timezone *tz
 	static int firsttime = 1;
 	int error = 0;
 
+	printk("%s: tv->tv_sec = %ld", __func__, tv->tv_sec);
 	if (tv && !timespec64_valid_settod(tv))
 		return -EINVAL;
 

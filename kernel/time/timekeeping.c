@@ -1301,38 +1301,52 @@ int do_settimeofday64(const struct timespec64 *ts)
 	unsigned long flags;
 	int ret = 0;
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	if (!timespec64_valid_settod(ts))
 		return -EINVAL;
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	raw_spin_lock_irqsave(&timekeeper_lock, flags);
 	write_seqcount_begin(&tk_core.seq);
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	timekeeping_forward_now(tk);
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	xt = tk_xtime(tk);
 	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
 	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
+		printk("%s: LINE = %d", __func__, __LINE__);
 		ret = -EINVAL;
 		goto out;
 	}
+	printk("%s: LINE = %d", __func__, __LINE__);
 
 	tk_set_wall_to_mono(tk, timespec64_sub(tk->wall_to_monotonic, ts_delta));
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	tk_set_xtime(tk, ts);
 out:
+	printk("%s: LINE = %d", __func__, __LINE__);
 	timekeeping_update(tk, TK_CLEAR_NTP | TK_MIRROR | TK_CLOCK_WAS_SET);
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	write_seqcount_end(&tk_core.seq);
 	raw_spin_unlock_irqrestore(&timekeeper_lock, flags);
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	/* signal hrtimers about time change */
 	clock_was_set();
+
+	printk("%s: LINE = %d", __func__, __LINE__);
 
 	if (!ret)
 		audit_tk_injoffset(ts_delta);
 
+	printk("%s: LINE = %d, ret = %d", __func__, __LINE__, ret);
 	return ret;
 }
 EXPORT_SYMBOL(do_settimeofday64);

@@ -83,7 +83,7 @@ int cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
 		if (ns->level <= cred->user_ns->level)
 			return -EPERM;
 
-		/* 
+		/*
 		 * The owner of the user namespace in the parent of the
 		 * user namespace has all caps.
 		 */
@@ -110,6 +110,7 @@ int cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
  */
 int cap_settime(const struct timespec64 *ts, const struct timezone *tz)
 {
+	printk("%s:", __func__);
 	if (!capable(CAP_SYS_TIME))
 		return -EPERM;
 	return 0;
