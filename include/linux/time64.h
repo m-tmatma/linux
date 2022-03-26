@@ -3,6 +3,7 @@
 #define _LINUX_TIME64_H
 
 #include <linux/math64.h>
+#include <linux/printk.h>
 #include <vdso/time64.h>
 
 typedef __s64 time64_t;
@@ -107,11 +108,18 @@ static inline bool timespec64_valid_strict(const struct timespec64 *ts)
 
 static inline bool timespec64_valid_settod(const struct timespec64 *ts)
 {
+	printk("%s: LINE = %d", __func__, __LINE__);
 	if (!timespec64_valid(ts))
 		return false;
 	/* Disallow values which cause overflow issues vs. CLOCK_REALTIME */
-	if ((unsigned long long)ts->tv_sec >= TIME_SETTOD_SEC_MAX)
+	printk("%s: LINE = %d", __func__, __LINE__);
+	printk("%s: ts->tv_sec = %lld", __func__, ts->tv_sec);
+	printk("%s: TIME_SETTOD_SEC_MAX = %lld", __func__, (long long int)TIME_SETTOD_SEC_MAX);
+	if ((unsigned long long)ts->tv_sec >= TIME_SETTOD_SEC_MAX){
+		printk("%s: LINE = %d", __func__, __LINE__);
 		return false;
+	}
+	printk("%s: LINE = %d", __func__, __LINE__);
 	return true;
 }
 

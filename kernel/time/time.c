@@ -35,7 +35,7 @@
 #include <linux/fs.h>
 #include <linux/math64.h>
 #include <linux/ptrace.h>
-
+#include <linux/printk.h>
 #include <linux/uaccess.h>
 #include <linux/compat.h>
 #include <asm/unistd.h>
@@ -171,29 +171,39 @@ int do_sys_settimeofday64(const struct timespec64 *tv, const struct timezone *tz
 	static int firsttime = 1;
 	int error = 0;
 
-	printk("%s: tv->tv_sec = %ld", __func__, tv->tv_sec);
+	printk("%s: tv->tv_sec = %lld", __func__, tv->tv_sec);
 	if (tv && !timespec64_valid_settod(tv))
 		return -EINVAL;
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	error = security_settime64(tv, tz);
 	if (error)
 		return error;
 
+	printk("%s: LINE = %d", __func__, __LINE__);
 	if (tz) {
 		/* Verify we're within the +-15 hrs range */
+		printk("%s: LINE = %d", __func__, __LINE__);
 		if (tz->tz_minuteswest > 15*60 || tz->tz_minuteswest < -15*60)
 			return -EINVAL;
 
+		printk("%s: LINE = %d", __func__, __LINE__);
 		sys_tz = *tz;
 		update_vsyscall_tz();
+		printk("%s: LINE = %d", __func__, __LINE__);
 		if (firsttime) {
+			printk("%s: LINE = %d", __func__, __LINE__);
 			firsttime = 0;
-			if (!tv)
+			if (!tv) {
+				printk("%s: LINE = %d", __func__, __LINE__);
 				timekeeping_warp_clock();
+			}
 		}
 	}
+	printk("%s: LINE = %d", __func__, __LINE__);
 	if (tv)
 		return do_settimeofday64(tv);
+	printk("%s: LINE = %d", __func__, __LINE__);
 	return 0;
 }
 
