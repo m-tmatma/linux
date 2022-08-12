@@ -5047,6 +5047,20 @@ static int nand_detect(struct nand_chip *chip, struct nand_flash_dev *type)
 	if (!type)
 		type = nand_flash_ids;
 
+	struct nand_flash_dev * ptype = nand_flash_ids;
+	while(ptype->name != NULL)
+	{
+		printk("%s: %s %02x,%02x,%02x,%02x,%02x,%02x (%02x, %02x) size = %d",
+			__func__,
+			ptype->name,
+			ptype->id[0], ptype->id[1], ptype->id[2], ptype->id[3],
+			ptype->id[4], ptype->id[5],	ptype->id[6], ptype->id[7],
+			ptype->mfr_id, ptype->dev_id,
+			ptype->chipsize);
+		ptype++;
+	}
+
+
 	/*
 	 * Save the NAND_BUSWIDTH_16 flag before letting auto-detection logic
 	 * override it.
