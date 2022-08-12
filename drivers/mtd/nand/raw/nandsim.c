@@ -2278,6 +2278,7 @@ static int __init ns_init_module(void)
 	/* and 'badblocks' parameters to work */
 	chip->options   |= NAND_SKIP_BBTSCAN;
 
+	printk("%s: bbt = %d\n", __func__, bbt);
 	switch (bbt) {
 	case 2:
 		chip->bbt_options |= NAND_BBT_NO_OOB;
@@ -2304,6 +2305,12 @@ static int __init ns_init_module(void)
 		ns->geom.idbytes = 4;
 	else
 		ns->geom.idbytes = 2;
+	printk("%s: idbytes = %d, id_bytes = %02x, %02x, %02x, %02x, %02x, %02x, %02x, %02x\n",
+		__func__,
+		ns->geom.idbytes,
+		id_bytes[0], id_bytes[1], id_bytes[2], id_bytes[3],
+		id_bytes[4], id_bytes[5], id_bytes[6], id_bytes[7]
+	);
 	ns->regs.status = NS_STATUS_OK(ns);
 	ns->nxstate = STATE_UNKNOWN;
 	ns->options |= OPT_PAGE512; /* temporary value */
